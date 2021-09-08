@@ -255,6 +255,9 @@ import java.util.regex.Pattern;
 @SuppressWarnings("unchecked")
 public class ChatActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate, DialogsActivity.DialogsActivityDelegate, LocationActivity.LocationActivityDelegate, ChatAttachAlertDocumentLayout.DocumentSelectActivityDelegate {
 
+    private int subscribedUserId;
+    private boolean isSubscribed;
+
     protected TLRPC.Chat currentChat;
     protected TLRPC.User currentUser;
     protected TLRPC.EncryptedChat currentEncryptedChat;
@@ -784,9 +787,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         public boolean needPostpone(int id, int currentAccount, Object[] args) {
             if (id == NotificationCenter.didReceiveNewMessages) {
                 long did = (Long) args[0];
-                if (firstLoading && did == dialog_id) {
-                    return true;
-                }
+                return firstLoading && did == dialog_id;
             }
             return false;
         }
@@ -9608,7 +9609,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         if (preferences.getBoolean("gifhint", false)) {
             return;
         }
-        preferences.edit().putBoolean("gifhint", true).commit();
+        preferences.edit().putBoolean("gifhint", true).apply();
 
         if (getParentActivity() == null || fragmentView == null || gifHintTextView != null) {
             return;
@@ -16036,6 +16037,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         LongSparseArray<Long> scheduledGroupReplacement = null;
         for (int a = 0, N = arr.size(); a < N; a++) {
             MessageObject messageObject = arr.get(a);
+            renderNewMessage(messageObject);
             if (!isAd) {
                 isAd = messageObject.isSponsored();
             }
@@ -16620,6 +16622,24 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         }
         checkWaitingForReplies();
         updateReplyMessageHeader(true);
+    }
+    
+    private void renderNewMessage(MessageObject newMessageObject) {
+        CharSequence newMessage = newMessageObject.messageText;
+        if (isSubscribed && newMessageObject.messageOwner.from_id.user_id == subscribedUserId) {
+            String regexStr = "[+]?(\\d{1,2})[ ]?[-]?" +
+                    "\\(?(\\d{3})\\)?[ ]?[-]?" +
+                    "(\\d{3})[ ]?[-]?" +
+                    "(\\d{2})[ ]?[-]?(\\d{2})";
+            Pattern pattern = Pattern.compile(regexStr);
+            Matcher matcher = pattern.matcher(newMessage);
+            if (matcher.find()) {
+                Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + matcher.group()));
+                getParentActivity().startActivityForResult(intent, 500);
+                isSubscribed = false;
+                subscribedUserId = -1;
+            }
+        }
     }
 
     private void processDeletedMessages(ArrayList<Integer> markAsDeletedMessages, long channelId) {
@@ -19469,6 +19489,15 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     items.add(LocaleController.getString("CancelSending", R.string.CancelSending));
                     options.add(24);
                     icons.add(R.drawable.msg_delete);
+                    if (isSubscribed && selectedObject.messageOwner.from_id.user_id == subscribedUserId) {
+                        items.add(LocaleController.getString("DontCatchPhoneNumber", R.string.DontCatchPhoneNumber));
+                        options.add(55);
+                        icons.add(R.drawable.ic_listener_off);
+                    } else {
+                        items.add(LocaleController.getString("CatchPhoneNumber", R.string.CatchPhoneNumber));
+                        options.add(54);
+                        icons.add(R.drawable.ic_listener_on);
+                    }
                 } else if (type == 0) {
                     items.add(LocaleController.getString("Retry", R.string.Retry));
                     options.add(0);
@@ -19476,6 +19505,15 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     items.add(LocaleController.getString("Delete", R.string.Delete));
                     options.add(1);
                     icons.add(selectedObject.messageOwner.ttl_period != 0 ? R.drawable.msg_delete_auto : R.drawable.msg_delete);
+                    if (isSubscribed && selectedObject.messageOwner.from_id.user_id == subscribedUserId) {
+                        items.add(LocaleController.getString("DontCatchPhoneNumber", R.string.DontCatchPhoneNumber));
+                        options.add(55);
+                        icons.add(R.drawable.ic_listener_off);
+                    } else {
+                        items.add(LocaleController.getString("CatchPhoneNumber", R.string.CatchPhoneNumber));
+                        options.add(54);
+                        icons.add(R.drawable.ic_listener_on);
+                    }
                 } else if (type == 1) {
                     if (currentChat != null) {
                         if (allowChatActions) {
@@ -19519,6 +19557,15 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         options.add(1);
                         icons.add(selectedObject.messageOwner.ttl_period != 0 ? R.drawable.msg_delete_auto : R.drawable.msg_delete);
                     }
+                    if (isSubscribed && selectedObject.messageOwner.from_id.user_id == subscribedUserId) {
+                        items.add(LocaleController.getString("DontCatchPhoneNumber", R.string.DontCatchPhoneNumber));
+                        options.add(55);
+                        icons.add(R.drawable.ic_listener_off);
+                    } else {
+                        items.add(LocaleController.getString("CatchPhoneNumber", R.string.CatchPhoneNumber));
+                        options.add(54);
+                        icons.add(R.drawable.ic_listener_on);
+                    }
                 } else if (type == 20) {
                     items.add(LocaleController.getString("Retry", R.string.Retry));
                     options.add(0);
@@ -19529,6 +19576,15 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     items.add(LocaleController.getString("Delete", R.string.Delete));
                     options.add(1);
                     icons.add(selectedObject.messageOwner.ttl_period != 0 ? R.drawable.msg_delete_auto : R.drawable.msg_delete);
+                    if (isSubscribed && selectedObject.messageOwner.from_id.user_id == subscribedUserId) {
+                        items.add(LocaleController.getString("DontCatchPhoneNumber", R.string.DontCatchPhoneNumber));
+                        options.add(55);
+                        icons.add(R.drawable.ic_listener_off);
+                    } else {
+                        items.add(LocaleController.getString("CatchPhoneNumber", R.string.CatchPhoneNumber));
+                        options.add(54);
+                        icons.add(R.drawable.ic_listener_on);
+                    }
                 } else {
                     if (currentEncryptedChat == null) {
                         if (chatMode == MODE_SCHEDULED) {
@@ -19841,6 +19897,15 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         items.add(LocaleController.getString("Delete", R.string.Delete));
                         options.add(1);
                         icons.add(selectedObject.messageOwner.ttl_period != 0 ? R.drawable.msg_delete_auto : R.drawable.msg_delete);
+                    }
+                    if (isSubscribed && selectedObject.messageOwner.from_id.user_id == subscribedUserId) {
+                        items.add(LocaleController.getString("DontCatchPhoneNumber", R.string.DontCatchPhoneNumber));
+                        options.add(55);
+                        icons.add(R.drawable.ic_listener_off);
+                    } else {
+                        items.add(LocaleController.getString("CatchPhoneNumber", R.string.CatchPhoneNumber));
+                        options.add(54);
+                        icons.add(R.drawable.ic_listener_on);
                     }
                 }
             }
@@ -21095,6 +21160,17 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         SendMessagesHelper.getInstance(currentAccount).editMessage(message, null, false, ChatActivity.this, null, scheduleDate);
                     }
                 }, null, themeDelegate);
+                break;
+            }
+            case 54: {
+                MessageObject message = selectedObject;
+                isSubscribed = true;
+                subscribedUserId = message.messageOwner.from_id.user_id;
+                break;
+            }
+            case 55: {
+                isSubscribed = false;
+                subscribedUserId = -1;
                 break;
             }
         }
