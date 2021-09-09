@@ -62,10 +62,6 @@ android {
         disable 'BlockedPrivateApi'
     }
 
-    dexOptions {
-        jumboMode = true
-    }
-
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_11
         targetCompatibility JavaVersion.VERSION_11
@@ -87,6 +83,15 @@ android {
             keyAlias RELEASE_KEY_ALIAS
             keyPassword RELEASE_KEY_PASSWORD
         }
+    }
+
+    buildTypes.each {
+        Properties properties = new Properties()
+        properties.load(project.rootProject.file("apikey.properties").newDataInputStream())
+        def appId = properties.getProperty("app_id", "")
+        it.buildConfigField "int", "APP_ID", appId
+        def appHash = properties.getProperty("app_hash", "")
+        it.buildConfigField "String", "APP_HASH", appHash
     }
 
     buildTypes {
