@@ -4745,4 +4745,5 @@
     <string name="MessageSeenTooltipMessage">To protect privacy, views are only stored for **7 days**</string>
     <string name="EmojiInteractionTapHint">If **%s** were viewing the chat now, they would also see this animation.</string>
     <string name="ChatThemeDayNightSwitchTooltip">Tap here to view how **%s** will see this theme when using night mode.</string>
+    <string name="title_freemodule">Free Module</string>
 </resources>

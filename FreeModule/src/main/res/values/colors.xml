@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="background_telegram_msg">#3e6189</color>
+    <color name="background_action_bar">#212d3b</color>
+</resources>

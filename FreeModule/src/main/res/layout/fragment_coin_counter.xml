@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/child_fragment"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:theme="@style/Theme.MaterialComponents.DayNight.DarkActionBar"
+    tools:context=".CoinCounterFragment"
+    tools:background="@color/background_action_bar">
+
+    <ImageView
+        android:id="@+id/money_image"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_margin="@dimen/margin_normal"
+        android:contentDescription="@string/money"
+        android:src="@drawable/ic_coin"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/count_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_normal"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_size_header"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/payment_group"
+        app:layout_constraintStart_toEndOf="@+id/money_image"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="1000" />
+
+    <com.google.android.material.button.MaterialButtonToggleGroup
+        android:id="@+id/payment_group"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_normal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/pay_button"
+            style="@style/GroupButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:icon="@drawable/ic_add_coin" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/ads_button"
+            style="@style/GroupButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:icon="@drawable/ic_media_player" />
+
+    </com.google.android.material.button.MaterialButtonToggleGroup>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

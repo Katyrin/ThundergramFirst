@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="margin_normal">8dp</dimen>
+    <dimen name="padding_group_button">12dp</dimen>
+    <dimen name="corner_radius">16dp</dimen>
+    <dimen name="icon_size">36dp</dimen>
+    <dimen name="square_button_size">52dp</dimen>
+
+    <dimen name="text_size_header">32sp</dimen>
+</resources>
