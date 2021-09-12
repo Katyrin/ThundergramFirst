@@ -19,6 +19,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 
+import com.katyrin.freemodule.data.Event;
+import com.katyrin.freemodule.bus.EventBus;
+
 import org.telegram.messenger.AccountInstance;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
@@ -328,19 +331,18 @@ public class Browser {
             FileLog.e(e);
         }
         try {
-            Intent intent;
             if (uri.toString().startsWith("tel")) {
-                intent = new Intent(Intent.ACTION_CALL, uri);
+                EventBus.INSTANCE.invokeEvent(new Event(-1, uri));
             } else {
-                intent = new Intent(Intent.ACTION_VIEW, uri);
+                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                if (internalUri) {
+                    ComponentName componentName = new ComponentName(context.getPackageName(), LaunchActivity.class.getName());
+                    intent.setComponent(componentName);
+                }
+                intent.putExtra(android.provider.Browser.EXTRA_CREATE_NEW_TAB, true);
+                intent.putExtra(android.provider.Browser.EXTRA_APPLICATION_ID, context.getPackageName());
+                context.startActivity(intent);
             }
-            if (internalUri) {
-                ComponentName componentName = new ComponentName(context.getPackageName(), LaunchActivity.class.getName());
-                intent.setComponent(componentName);
-            }
-            intent.putExtra(android.provider.Browser.EXTRA_CREATE_NEW_TAB, true);
-            intent.putExtra(android.provider.Browser.EXTRA_APPLICATION_ID, context.getPackageName());
-            context.startActivity(intent);
         } catch (Exception e) {
             FileLog.e(e);
         }

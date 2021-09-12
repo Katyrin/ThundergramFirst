@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="money">Money</string>
+    <string name="prefs_key">Prefs Key</string>
+    <string name="lack_count_message">You don\'t have enough points. Top up your counter</string>
+    <string name="catch_phone_number">Catch phone number</string>
+    <string name="dont_catch_phone_number">Don\'t catch phone number</string>
 </resources>

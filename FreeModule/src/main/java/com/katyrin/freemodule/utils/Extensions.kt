@@ -1,8 +1,17 @@
 package com.katyrin.freemodule.utils
 
+import android.app.Activity
+import android.content.Intent
+import android.net.Uri
 import android.widget.Toast
-import android.app.Fragment
 
-fun Fragment.toast(message: String) {
-    Toast.makeText(activity, message, Toast.LENGTH_SHORT).show()
-}
+private const val REQUEST_CODE = 500
+
+fun Activity.toast(message: String?): Unit =
+    Toast.makeText(this, message, Toast.LENGTH_LONG).show()
+
+fun Activity.toast(resourceId: Int): Unit =
+    Toast.makeText(this, resourceId, Toast.LENGTH_LONG).show()
+
+fun Activity.cellNumber(uri: Uri): Unit =
+    startActivityForResult(Intent(Intent.ACTION_CALL, uri), REQUEST_CODE)

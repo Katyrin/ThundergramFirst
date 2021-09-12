@@ -8,16 +8,12 @@
 
 package org.telegram.ui.ActionBar;
 
-import static android.content.Context.LAYOUT_INFLATER_SERVICE;
-
 import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
-import android.app.Fragment;
 import android.app.FragmentTransaction;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -26,7 +22,6 @@ import android.os.Bundle;
 import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
@@ -52,7 +47,6 @@ import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationsController;
-import org.telegram.messenger.R;
 import org.telegram.messenger.SecretChatHelper;
 import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.messenger.UserConfig;
@@ -62,8 +56,6 @@ import org.telegram.ui.Components.LayoutHelper;
 import java.util.ArrayList;
 
 public abstract class BaseFragment {
-
-    private Fragment coinCurrentFragment;
 
     private boolean isFinished;
     private boolean finishing;
@@ -231,21 +223,25 @@ public abstract class BaseFragment {
     }
 
     @SuppressLint("ResourceType")
-    protected ActionBar createActionBar(Context context) {
-        coinCurrentFragment = (Fragment) CoinCounterFragment.Companion.newInstance();
-
-        ActionBar actionBar = new ActionBar(context);
-        actionBar.setExtraHeight(200);
-
+    private FrameLayout createAdsFrameLayout(Context context) {
         FrameLayout container = new FrameLayout(context);
         container.setId(24051991);
-        FrameLayout.LayoutParams layoutParams = LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT);
-        layoutParams.gravity = Gravity.BOTTOM;
-        actionBar.addView(container, layoutParams);
 
         FragmentTransaction transaction = ((Activity) context).getFragmentManager().beginTransaction();
-        transaction.replace(container.getId(), coinCurrentFragment);
+        transaction.replace(container.getId(), CoinCounterFragment.Companion.newInstance());
         transaction.commit();
+
+        return container;
+    }
+
+
+    protected ActionBar createActionBar(Context context) {
+        ActionBar actionBar = new ActionBar(context);
+
+        FrameLayout.LayoutParams layoutParams =
+                LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.BOTTOM);
+        actionBar.addView(createAdsFrameLayout(context), layoutParams);
+        actionBar.setAdsExtraHeight(AndroidUtilities.dp(54));
 
         actionBar.setBackgroundColor(Theme.getColor(Theme.key_actionBarDefault));
         actionBar.setItemsBackgroundColor(Theme.getColor(Theme.key_actionBarDefaultSelector), false);

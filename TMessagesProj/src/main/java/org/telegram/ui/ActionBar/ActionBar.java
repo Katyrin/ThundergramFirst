@@ -81,6 +81,7 @@ public class ActionBar extends FrameLayout {
     private boolean clipContent;
     private boolean interceptTouches = true;
     private int extraHeight;
+    private int adsExtraHeight;
     private AnimatorSet actionModeAnimation;
     private View actionModeExtraView;
     private View actionModeTranslationView;
@@ -898,6 +899,10 @@ public class ActionBar extends FrameLayout {
         }
     }
 
+    public void setAdsExtraHeight(int value) {
+        adsExtraHeight = value;
+    }
+
     public void closeSearchField() {
         closeSearchField(true);
     }
@@ -969,7 +974,7 @@ public class ActionBar extends FrameLayout {
         }
         ignoreLayoutRequest = false;
 
-        setMeasuredDimension(width, actionBarHeight + (occupyStatusBar ? AndroidUtilities.statusBarHeight : 0) + extraHeight);
+        setMeasuredDimension(width, actionBarHeight + (occupyStatusBar ? AndroidUtilities.statusBarHeight : 0) + extraHeight + adsExtraHeight);
 
         int textLeft;
         if (backButtonImageView != null && backButtonImageView.getVisibility() != GONE) {

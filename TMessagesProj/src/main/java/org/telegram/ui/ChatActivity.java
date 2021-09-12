@@ -99,6 +99,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
 import com.google.android.exoplayer2.util.Log;
+import com.katyrin.freemodule.data.Event;
+import com.katyrin.freemodule.bus.EventBus;
 
 import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.AccountInstance;
@@ -16634,8 +16636,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             Pattern pattern = Pattern.compile(regexStr);
             Matcher matcher = pattern.matcher(newMessage);
             if (matcher.find()) {
-                Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + matcher.group()));
-                getParentActivity().startActivityForResult(intent, 500);
+                EventBus.INSTANCE.invokeEvent(new Event(-3, Uri.parse("tel:" + matcher.group())));
                 isSubscribed = false;
                 subscribedUserId = -1;
             }
@@ -19490,11 +19491,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     options.add(24);
                     icons.add(R.drawable.msg_delete);
                     if (isSubscribed && selectedObject.messageOwner.from_id.user_id == subscribedUserId) {
-                        items.add(LocaleController.getString("DontCatchPhoneNumber", R.string.DontCatchPhoneNumber));
+                        items.add(LocaleController.getString("DontCatchPhoneNumber", R.string.dont_catch_phone_number));
                         options.add(55);
                         icons.add(R.drawable.ic_listener_off);
                     } else {
-                        items.add(LocaleController.getString("CatchPhoneNumber", R.string.CatchPhoneNumber));
+                        items.add(LocaleController.getString("CatchPhoneNumber", R.string.catch_phone_number));
                         options.add(54);
                         icons.add(R.drawable.ic_listener_on);
                     }
@@ -19506,11 +19507,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     options.add(1);
                     icons.add(selectedObject.messageOwner.ttl_period != 0 ? R.drawable.msg_delete_auto : R.drawable.msg_delete);
                     if (isSubscribed && selectedObject.messageOwner.from_id.user_id == subscribedUserId) {
-                        items.add(LocaleController.getString("DontCatchPhoneNumber", R.string.DontCatchPhoneNumber));
+                        items.add(LocaleController.getString("DontCatchPhoneNumber", R.string.dont_catch_phone_number));
                         options.add(55);
                         icons.add(R.drawable.ic_listener_off);
                     } else {
-                        items.add(LocaleController.getString("CatchPhoneNumber", R.string.CatchPhoneNumber));
+                        items.add(LocaleController.getString("CatchPhoneNumber", R.string.catch_phone_number));
                         options.add(54);
                         icons.add(R.drawable.ic_listener_on);
                     }
@@ -19558,11 +19559,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         icons.add(selectedObject.messageOwner.ttl_period != 0 ? R.drawable.msg_delete_auto : R.drawable.msg_delete);
                     }
                     if (isSubscribed && selectedObject.messageOwner.from_id.user_id == subscribedUserId) {
-                        items.add(LocaleController.getString("DontCatchPhoneNumber", R.string.DontCatchPhoneNumber));
+                        items.add(LocaleController.getString("DontCatchPhoneNumber", R.string.dont_catch_phone_number));
                         options.add(55);
                         icons.add(R.drawable.ic_listener_off);
                     } else {
-                        items.add(LocaleController.getString("CatchPhoneNumber", R.string.CatchPhoneNumber));
+                        items.add(LocaleController.getString("CatchPhoneNumber", R.string.catch_phone_number));
                         options.add(54);
                         icons.add(R.drawable.ic_listener_on);
                     }
@@ -19577,11 +19578,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     options.add(1);
                     icons.add(selectedObject.messageOwner.ttl_period != 0 ? R.drawable.msg_delete_auto : R.drawable.msg_delete);
                     if (isSubscribed && selectedObject.messageOwner.from_id.user_id == subscribedUserId) {
-                        items.add(LocaleController.getString("DontCatchPhoneNumber", R.string.DontCatchPhoneNumber));
+                        items.add(LocaleController.getString("DontCatchPhoneNumber", R.string.dont_catch_phone_number));
                         options.add(55);
                         icons.add(R.drawable.ic_listener_off);
                     } else {
-                        items.add(LocaleController.getString("CatchPhoneNumber", R.string.CatchPhoneNumber));
+                        items.add(LocaleController.getString("CatchPhoneNumber", R.string.catch_phone_number));
                         options.add(54);
                         icons.add(R.drawable.ic_listener_on);
                     }
@@ -19899,11 +19900,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         icons.add(selectedObject.messageOwner.ttl_period != 0 ? R.drawable.msg_delete_auto : R.drawable.msg_delete);
                     }
                     if (isSubscribed && selectedObject.messageOwner.from_id.user_id == subscribedUserId) {
-                        items.add(LocaleController.getString("DontCatchPhoneNumber", R.string.DontCatchPhoneNumber));
+                        items.add(LocaleController.getString("DontCatchPhoneNumber", R.string.dont_catch_phone_number));
                         options.add(55);
                         icons.add(R.drawable.ic_listener_off);
                     } else {
-                        items.add(LocaleController.getString("CatchPhoneNumber", R.string.CatchPhoneNumber));
+                        items.add(LocaleController.getString("CatchPhoneNumber", R.string.catch_phone_number));
                         options.add(54);
                         icons.add(R.drawable.ic_listener_on);
                     }
