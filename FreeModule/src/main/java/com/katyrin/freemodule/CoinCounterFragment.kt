@@ -1,38 +1,61 @@
 package com.katyrin.freemodule
 
-import android.app.Activity
-import android.app.Fragment
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
+import com.google.android.gms.ads.*
+import com.google.android.gms.ads.rewarded.RewardedAd
+import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
+import com.katyrin.freemodule.data.AppState
+import com.katyrin.freemodule.data.Event
 import com.katyrin.freemodule.databinding.FragmentCoinCounterBinding
 import com.katyrin.freemodule.storage.StorageImpl
-import com.katyrin.freemodule.data.Event
-import com.katyrin.freemodule.bus.EventBus
-import com.katyrin.freemodule.data.AppState
 import com.katyrin.freemodule.utils.cellNumber
+import com.katyrin.freemodule.utils.launchWhenStarted
 import com.katyrin.freemodule.utils.toast
-import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
 class CoinCounterFragment : Fragment() {
 
-    private val currentActivity: Activity by lazy { activity }
+    private var mRewardedAd: RewardedAd? = null
     private var binding: FragmentCoinCounterBinding? = null
-    private val viewModel: CoinCounterViewModel by lazy {
-        CoinCounterViewModel(StorageImpl(currentActivity))
+    private val viewModel: CoinCounterViewModel by viewModels {
+        ViewModelFactory(StorageImpl(requireContext()))
     }
 
-    private val coroutineScope = CoroutineScope(
-        Dispatchers.Main
-                + SupervisorJob()
-                + CoroutineExceptionHandler { _, throwable -> handleError(throwable) }
-    )
+    private val rewardedAdLoadCallback = object : RewardedAdLoadCallback() {
+        override fun onAdFailedToLoad(adError: LoadAdError) {
+            toast(adError.message)
+            mRewardedAd = null
+        }
 
-    private fun handleError(error: Throwable): Unit = currentActivity.toast(error.message)
+        override fun onAdLoaded(rewardedAd: RewardedAd) {
+            toast("Ad was loaded.")
+            mRewardedAd = rewardedAd
+        }
+    }
+
+    private val fullScreenContentCallback = object : FullScreenContentCallback() {
+        override fun onAdShowedFullScreenContent() {
+            toast("Ad was shown.")
+            loadRewardedAd()
+        }
+
+        override fun onAdFailedToShowFullScreenContent(adError: AdError?) {
+            toast("Ad failed to show.")
+            loadRewardedAd()
+        }
+
+        override fun onAdDismissedFullScreenContent() {
+            toast("Ad was dismissed.")
+            mRewardedAd = null
+            loadRewardedAd()
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -44,48 +67,72 @@ class CoinCounterFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         savedInstanceState ?: viewModel.getCount()
+        initAds()
         initViews()
         getCoroutinesResult()
+    }
+
+    private fun initAds() {
+        MobileAds.initialize(requireContext()) {}
+        RequestConfiguration.Builder().setTestDeviceIds(listOf("AB3034792ED476712252E3AE416A3296"))
+        loadRewardedAd()
     }
 
     private fun initViews() {
         binding?.apply {
             payButton.setOnClickListener { viewModel.setCount(10) }
-            adsButton.setOnClickListener { viewModel.setCount(1) }
+            adsButton.setOnClickListener { showRewardedAd() }
         }
     }
 
     private fun getCoroutinesResult() {
-        coroutineScope.launch { EventBus.events.collectLatest(::renderEvent) }
         viewModel.sharedFlow
             .onEach(::renderData)
-            .launchIn(coroutineScope)
+            .launchWhenStarted(lifecycleScope)
     }
 
     private fun renderData(appState: AppState) {
         when (appState) {
             is AppState.ShowCount -> binding?.countTextView?.text = appState.count
             is AppState.CallNumber -> callNumberState(appState.event)
-            is AppState.ShowLackCount -> currentActivity.toast(R.string.lack_count_message)
+            is AppState.Error -> toast(appState.message)
+            is AppState.ShowLackCount -> toast(R.string.lack_count_message)
         }
     }
 
     private fun callNumberState(event: Event) {
-        currentActivity.cellNumber(event.uri)
+        requireActivity().cellNumber(event.uri)
         viewModel.setCount(event.count)
     }
 
-    private fun renderEvent(event: Event): Unit = viewModel.checkCount(event)
+    private fun loadRewardedAd() {
+        RewardedAd.load(
+            requireContext(),
+            "ca-app-pub-3940256099942544/5224354917",
+            AdRequest.Builder().build(),
+            rewardedAdLoadCallback
+        )
+        mRewardedAd?.fullScreenContentCallback = fullScreenContentCallback
+    }
 
-    private fun cancelJob(): Unit = coroutineScope.coroutineContext.cancelChildren()
+    private fun showRewardedAd() {
+        if (mRewardedAd != null) mRewardedAd?.show(requireActivity()) { onUserEarnedReward() }
+        else toast("The rewarded ad wasn't ready yet.")
+    }
+
+    private fun onUserEarnedReward() {
+        viewModel.setCount(1)
+        loadRewardedAd()
+    }
 
     override fun onDestroyView() {
         binding = null
-        cancelJob()
+        mRewardedAd = null
         super.onDestroyView()
     }
 
     companion object {
+        @JvmStatic
         fun newInstance(): Fragment = CoinCounterFragment()
     }
 }
