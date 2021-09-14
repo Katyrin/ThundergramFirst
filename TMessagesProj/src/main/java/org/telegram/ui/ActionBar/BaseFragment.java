@@ -13,7 +13,7 @@ import android.animation.AnimatorSet;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
-import android.app.FragmentTransaction;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -30,6 +30,10 @@ import android.view.ViewParent;
 import android.view.Window;
 import android.view.accessibility.AccessibilityManager;
 import android.widget.FrameLayout;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.katyrin.freemodule.CoinCounterFragment;
 
@@ -227,8 +231,9 @@ public abstract class BaseFragment {
         FrameLayout container = new FrameLayout(context);
         container.setId(24051991);
 
-        FragmentTransaction transaction = ((Activity) context).getFragmentManager().beginTransaction();
-        transaction.replace(container.getId(), CoinCounterFragment.Companion.newInstance());
+        FragmentManager fragmentManager = ((AppCompatActivity) ((Activity) context)).getSupportFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.replace(container.getId(), CoinCounterFragment.newInstance());
         transaction.commit();
 
         return container;

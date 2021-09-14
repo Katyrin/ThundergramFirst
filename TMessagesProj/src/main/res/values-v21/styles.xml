@@ -11,7 +11,7 @@
 
     <!--THEMES-->
 
-    <style name="Theme.TMessages.Start" parent="@android:style/Theme.Material">
+    <style name="Theme.TMessages.Start" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="android:actionBarStyle">@style/ActionBar.Transparent.TMessages.Start</item>
         <item name="android:colorBackground">@android:color/white</item>
         <item name="android:windowBackground">@android:color/white</item>
