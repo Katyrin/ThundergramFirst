@@ -5,3 +5,4 @@ obj/
 *.iml
 local.properties
 apikey.properties
+/TMessagesProj/config/ThundergramKey

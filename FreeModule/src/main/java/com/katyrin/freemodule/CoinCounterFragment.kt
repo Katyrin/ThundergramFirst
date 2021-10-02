@@ -80,7 +80,9 @@ class CoinCounterFragment : Fragment() {
 
     private fun initViews() {
         binding?.apply {
-            payButton.setOnClickListener { viewModel.setCount(10) }
+            payButton.setOnClickListener {
+//                viewModel.setCount(10)
+             }
             adsButton.setOnClickListener { showRewardedAd() }
         }
     }
