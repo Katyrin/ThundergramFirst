@@ -4,4 +4,5 @@
     <color name="white">#FFFFFFFF</color>
     <color name="background_telegram_msg">#3e6189</color>
     <color name="background_action_bar">#212d3b</color>
+    <color name="header_text_color_light">#CC000000</color>
 </resources>

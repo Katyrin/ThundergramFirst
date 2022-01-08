@@ -10,7 +10,7 @@
     android:paddingBottom="@dimen/margin_normal"
     android:paddingTop="@dimen/margin_normal"
     android:theme="@style/Theme.MaterialComponents.DayNight.DarkActionBar"
-    tools:context=".CoinCounterFragment"
+    tools:context=".view.CoinCounterFragment"
     tools:background="@color/background_action_bar">
 
     <ImageView

@@ -1,4 +1,4 @@
-package com.katyrin.freemodule
+package com.katyrin.freemodule.viewmodel
 
 import androidx.lifecycle.ViewModel
 import com.katyrin.freemodule.bus.EventBus

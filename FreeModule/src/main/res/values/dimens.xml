@@ -8,4 +8,5 @@
     <dimen name="square_size">40dp</dimen>
 
     <dimen name="text_size_header">32sp</dimen>
+    <dimen name="text_size_header_normal">24sp</dimen>
 </resources>

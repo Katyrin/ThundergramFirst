@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:context=".view.BillingDialogFragment">
+
+    <TextView
+        android:id="@+id/header_text"
+        style="@style/BaseTextStyle.Header.Normal"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/service_connected_message"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/first_billing_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/margin_max"
+        android:layout_marginVertical="@dimen/margin_normal"
+        android:textSize="@dimen/text_size_header_normal"
+        app:layout_constraintBottom_toBottomOf="@id/first_billing_button"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/first_billing_button"
+        tools:text="First text" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/first_billing_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/margin_max"
+        android:layout_marginVertical="@dimen/margin_normal"
+        android:backgroundTint="@color/background_telegram_msg"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/header_text"
+        tools:text="Price" />
+
+    <TextView
+        android:id="@+id/second_billing_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/margin_max"
+        android:layout_marginVertical="@dimen/margin_normal"
+        android:textSize="@dimen/text_size_header_normal"
+        app:layout_constraintBottom_toBottomOf="@id/second_billing_button"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/second_billing_button"
+        tools:text="Second text" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/second_billing_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/margin_max"
+        android:layout_marginVertical="@dimen/margin_normal"
+        android:backgroundTint="@color/background_telegram_msg"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/first_billing_button"
+        tools:text="Price" />
+
+    <TextView
+        android:id="@+id/third_billing_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/margin_max"
+        android:layout_marginVertical="@dimen/margin_normal"
+        android:textSize="@dimen/text_size_header_normal"
+        app:layout_constraintBottom_toBottomOf="@id/third_billing_button"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/third_billing_button"
+        tools:text="Third text" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/third_billing_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/margin_max"
+        android:layout_marginVertical="@dimen/margin_normal"
+        android:backgroundTint="@color/background_telegram_msg"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/second_billing_button"
+        tools:text="Price" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

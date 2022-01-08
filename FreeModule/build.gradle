@@ -6,12 +6,19 @@ android {
     compileSdk 31
 
     defaultConfig {
-        minSdk 16
-        targetSdk 29
+        minSdk 21
+        targetSdk 30
         versionCode 1
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes.each {
+        Properties properties = new Properties()
+        properties.load(project.rootProject.file("apikey.properties").newDataInputStream())
+        def adUnitId = properties.getProperty("ad_unit_id", "")
+        it.buildConfigField "String", "AD_UNIT_ID", adUnitId
     }
 
     buildTypes {
@@ -40,10 +47,10 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.3.1'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1'
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.3.1'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.1'
     implementation 'com.google.android.material:material:1.4.0'
 
-    implementation 'com.google.android.gms:play-services-ads:20.3.0'
+    implementation 'com.google.android.gms:play-services-ads:20.4.0'
     implementation "com.android.billingclient:billing-ktx:4.0.0"
 }
 

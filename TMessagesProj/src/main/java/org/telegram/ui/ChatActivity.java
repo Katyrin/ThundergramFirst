@@ -257,7 +257,7 @@ import java.util.regex.Pattern;
 @SuppressWarnings("unchecked")
 public class ChatActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate, DialogsActivity.DialogsActivityDelegate, LocationActivity.LocationActivityDelegate, ChatAttachAlertDocumentLayout.DocumentSelectActivityDelegate {
 
-    private int subscribedUserId;
+    private long subscribedUserId;
     private boolean isSubscribed;
 
     protected TLRPC.Chat currentChat;

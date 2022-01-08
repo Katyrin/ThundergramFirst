@@ -5,4 +5,6 @@
     <string name="lack_count_message">You don\'t have enough points. Top up your counter</string>
     <string name="catch_phone_number">Catch phone number</string>
     <string name="dont_catch_phone_number">Don\'t catch phone number</string>
+    <string name="service_connected_message">Choose how many coins you need</string>
+    <string name="service_disconnected_message">The payment service is not available. Check your internet connection</string>
 </resources>

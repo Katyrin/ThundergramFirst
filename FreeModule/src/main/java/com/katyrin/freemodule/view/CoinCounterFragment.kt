@@ -1,22 +1,25 @@
-package com.katyrin.freemodule
+package com.katyrin.freemodule.view
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.ads.*
 import com.google.android.gms.ads.rewarded.RewardedAd
 import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
+import com.katyrin.freemodule.BuildConfig
+import com.katyrin.freemodule.R
 import com.katyrin.freemodule.data.AppState
 import com.katyrin.freemodule.data.Event
 import com.katyrin.freemodule.databinding.FragmentCoinCounterBinding
 import com.katyrin.freemodule.storage.StorageImpl
-import com.katyrin.freemodule.utils.cellNumber
-import com.katyrin.freemodule.utils.launchWhenStarted
-import com.katyrin.freemodule.utils.toast
+import com.katyrin.freemodule.utils.*
+import com.katyrin.freemodule.viewmodel.CoinCounterViewModel
+import com.katyrin.freemodule.viewmodel.ViewModelFactory
 import kotlinx.coroutines.flow.onEach
 
 class CoinCounterFragment : Fragment() {
@@ -61,8 +64,7 @@ class CoinCounterFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View = FragmentCoinCounterBinding.inflate(inflater, container, false)
-        .also { binding = it }
-        .root
+        .also { binding = it }.root
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -81,11 +83,21 @@ class CoinCounterFragment : Fragment() {
     private fun initViews() {
         binding?.apply {
             payButton.setOnClickListener {
-//                viewModel.setCount(10)
-             }
+                BillingDialogFragment.newInstance(getBillingFragmentManager())
+            }
             adsButton.setOnClickListener { showRewardedAd() }
         }
     }
+
+    private fun getBillingFragmentManager(): FragmentManager =
+        requireActivity().supportFragmentManager.apply {
+            setFragmentResultListener(BILLING_RESULT_KEY, viewLifecycleOwner) { key, bundle ->
+                if (key == BILLING_RESULT_KEY) {
+                    toast("viewModel.setCount(bundle.getInt(BILLING_COINS_COUNT))")
+                    viewModel.setCount(bundle.getInt(BILLING_COINS_COUNT))
+                }
+            }
+        }
 
     private fun getCoroutinesResult() {
         viewModel.sharedFlow
@@ -103,14 +115,14 @@ class CoinCounterFragment : Fragment() {
     }
 
     private fun callNumberState(event: Event) {
-        requireActivity().cellNumber(event.uri)
+        event.uri?.let { requireActivity().cellNumber(it) }
         viewModel.setCount(event.count)
     }
 
     private fun loadRewardedAd() {
         RewardedAd.load(
             requireContext(),
-            "ca-app-pub-3940256099942544/5224354917",
+            BuildConfig.AD_UNIT_ID,
             AdRequest.Builder().build(),
             rewardedAdLoadCallback
         )

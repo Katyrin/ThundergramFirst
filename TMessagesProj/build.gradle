@@ -33,13 +33,13 @@ dependencies {
     compileOnly 'org.checkerframework:checker-qual:2.5.2'
     compileOnly 'org.checkerframework:checker-compat-qual:2.5.0'
 
-    implementation 'com.google.android.gms:play-services-ads-lite:20.3.0'
+    implementation 'com.google.android.gms:play-services-ads-lite:20.4.0'
     implementation platform('com.google.firebase:firebase-bom:28.4.0')
     implementation 'com.google.firebase:firebase-analytics'
 
     implementation 'com.google.firebase:firebase-messaging:22.0.0'
     implementation 'com.google.firebase:firebase-config:21.0.1'
-    implementation 'com.google.firebase:firebase-datatransport:18.0.1'
+    implementation 'com.google.firebase:firebase-datatransport:18.1.0'
     implementation 'com.google.firebase:firebase-appindexing:20.0.0'
     implementation 'com.google.android.gms:play-services-maps:17.0.1'
     implementation 'com.google.android.gms:play-services-auth:19.2.0'
@@ -323,7 +323,7 @@ android {
         }
     }
 
-    defaultConfig.versionCode = 2432
+    defaultConfig.versionCode = 2443
 
     applicationVariants.all { variant ->
         variant.outputs.all { output ->
@@ -341,7 +341,7 @@ android {
 
     defaultConfig {
         minSdkVersion 21
-        targetSdkVersion 29
+        targetSdkVersion 30
         versionName "8.1.2"
 
         vectorDrawables.generatedDensities = ['mdpi', 'hdpi', 'xhdpi', 'xxhdpi']
